@@ -1,5 +1,7 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using System.Web.Http;
+using DemoWebApi.Interface;
 using DemoWebApi.Models.Domain;
 using DemoWebApi.Repository;
 
@@ -7,19 +9,27 @@ namespace DemoWebApi.Controllers
 {
     public class CustomersController : ApiController
     {
-        private Repository<Customer> _customerRepository;
+        private readonly IRepository<Customer> _customerRepository;
 
-        public CustomersController()
+        public CustomersController() : this(new Repository<Customer>())
         {
-            _customerRepository = new Repository<Customer>();
         }
 
-        
+        public CustomersController(IRepository<Customer> customerRepository)
+        {
+            _customerRepository = customerRepository;
+        }
+
 
         [Route("api/customers/{id}")]
         public IHttpActionResult Get(string id)
         {
-            var customer = _customerRepository.Get(x => x.CustomerID == id);
+            var customer = _customerRepository.GetAll()
+                                            .FirstOrDefault(x => x.CustomerID == id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
             return Ok(customer);
         }
 

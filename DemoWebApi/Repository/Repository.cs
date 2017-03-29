@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using DemoWebApi.Interface;
 
 namespace DemoWebApi.Repository
 {
-    public class Repository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         public Repository()
                     : this(new NorthwindDb())
@@ -49,12 +50,6 @@ namespace DemoWebApi.Repository
         public bool Exist(Expression<Func<TEntity, bool>> predicate)
         {
             return GetAll().Any(predicate);
-        }
-
-        public TEntity Get(Expression<Func<TEntity, bool>> predicate)
-        {
-            TEntity entity = Context.Set<TEntity>().FirstOrDefault(predicate);
-            return entity;
         }
 
         public IQueryable<TEntity> GetAll()
