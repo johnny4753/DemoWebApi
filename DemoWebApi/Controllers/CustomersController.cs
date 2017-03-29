@@ -1,6 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Linq;
+using System.Text;
 using System.Web.Http;
+using System.Web.Http.Description;
 using DemoWebApi.Extension;
 using DemoWebApi.Interface;
 using DemoWebApi.Models.Domain;
@@ -22,7 +24,13 @@ namespace DemoWebApi.Controllers
         }
 
 
+        /// <summary>
+        /// 取得單一顧客
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("api/customers/{id}")]
+        [ResponseType(typeof(Customer))]
         public IHttpActionResult Get(string id)
         {
             var customer = _customerRepository.GetAll()
@@ -56,24 +64,45 @@ namespace DemoWebApi.Controllers
         [HttpPost]
         public IHttpActionResult CreateCustomer([FromBody]Customer customer)
         {
-            _customerRepository.Create(customer);
-            return Ok(customer);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelValidationErrorMsg());
+            }
+            var createdCustomer = _customerRepository.Create(customer);
+            return Ok($"Customer:{createdCustomer.CustomerID} 已被新增");
         }
 
-        [Route("api/customers/{id}")]
+        [Route("api/customers")]
         [HttpPut]
-        public IHttpActionResult UpdateCustomer(string id, [FromBody]Customer customer)
+        public IHttpActionResult UpdateCustomer([FromBody]Customer customer)
         {
-            customer.CustomerID = id;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GetModelValidationErrorMsg());
+            }
             var updatedCustomer = _customerRepository.Update(customer);
-            return Ok(updatedCustomer);
+            return Ok($"Customer:{updatedCustomer.CustomerID} 已被更新");
         }
 
         [Route("api/customers/{id}")]
         [HttpDelete]
-        public void DeleteCustomer(string id)
+        public IHttpActionResult DeleteCustomer(string id)
         {
             _customerRepository.Delete(new Customer {CustomerID = id});
+            return Ok($"Customer:{id} 已被移除");
+        }
+
+        private string GetModelValidationErrorMsg()
+        {
+            var sb = new StringBuilder();
+            foreach (var modelState in ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    sb.Append(error.ErrorMessage);
+                }
+            }
+            return sb.ToString();
         }
     }
 }
