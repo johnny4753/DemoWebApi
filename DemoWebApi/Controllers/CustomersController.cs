@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
+using DemoWebApi.Extension;
 using DemoWebApi.Interface;
 using DemoWebApi.Models.Domain;
 using DemoWebApi.Repository;
@@ -38,6 +39,17 @@ namespace DemoWebApi.Controllers
         {
             var customers = _customerRepository.GetAll().Include(x => x.Orders);
             return Ok(customers);
+        }
+
+        [Route("api/customersCsv")]
+        public IHttpActionResult GetCustomersCsv()
+        {
+            var customers = _customerRepository.GetAll();
+            return this.Csv
+                (
+                    entities: customers, 
+                    fileName: $"{customers.FirstOrDefault()?.CompanyName}_Customers.csv"
+                );
         }
 
         [Route("api/customers")]
