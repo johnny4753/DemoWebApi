@@ -508,9 +508,53 @@
         </member>
         <member name="M:DemoWebApi.Controllers.CustomersController.Get(System.String)">
             <summary>
-            取得單一顧客
+            取得單一顧客資料
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DemoWebApi.Controllers.CustomersController.GetCustomersWithOrder">
+            <summary>
+            取得所有顧客及其相關的訂單
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DemoWebApi.Controllers.CustomersController.GetCustomerOrdersBy(System.String,System.Int32,System.Int32,System.Int32,DemoWebApi.Models.OrderSearchFilter)">
+            <summary>
+            取得該名顧客特定月份的分頁訂單資料，並透過 OrderSearchFilter 過濾
+            </summary>
+            <param name="customerId"></param>
+            <param name="year"></param>
+            <param name="month"></param>
+            <param name="pageNumber"></param>
+            <param name="searchFilter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DemoWebApi.Controllers.CustomersController.GetCustomersCsv">
+            <summary>
+            取得所有顧客資料 CSV 檔
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DemoWebApi.Controllers.CustomersController.CreateCustomer(DemoWebApi.Models.Domain.Customer)">
+            <summary>
+            建立一筆顧客資料
+            </summary>
+            <param name="customer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DemoWebApi.Controllers.CustomersController.UpdateCustomer(DemoWebApi.Models.Domain.Customer)">
+            <summary>
+            更新一筆顧客資料
+            </summary>
+            <param name="customer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DemoWebApi.Controllers.CustomersController.DeleteCustomer(System.String)">
+            <summary>
+            刪除一筆顧客資料
+            </summary>
+            <param name="customerId"></param>
             <returns></returns>
         </member>
     </members>
