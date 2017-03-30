@@ -1,0 +1,10 @@
+﻿@model DemoWebApi.Models.HomeUploadViewModel
+
+
+<h1>Upload Picture</h1>
+@using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="Imagefile" id="file" /><br>
+    <input value="Upload" type="submit" id="Upload" />
+    @Html.ValidationSummary();
+}

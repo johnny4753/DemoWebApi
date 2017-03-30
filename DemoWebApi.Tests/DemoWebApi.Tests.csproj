@@ -116,6 +116,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <Content Include="TestUpload\蟲蟲6.jpg" />
+    <Content Include="TestUpload\蟲蟲7.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
