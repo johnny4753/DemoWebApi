@@ -488,5 +488,25 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="T:DemoWebApi.Models.OrderSearchFilter">
+            <summary>
+            訂單搜尋過濾條件
+            </summary>
+        </member>
+        <member name="P:DemoWebApi.Models.OrderSearchFilter.SearchMinFreight">
+            <summary>
+            最小運費，意即搜尋運費 >= 此值的訂單
+            </summary>
+        </member>
+        <member name="P:DemoWebApi.Models.OrderSearchFilter.SearchShipName">
+            <summary>
+            船名
+            </summary>
+        </member>
+        <member name="P:DemoWebApi.Models.OrderSearchFilter.SearchShipCity">
+            <summary>
+            船城市
+            </summary>
+        </member>
     </members>
 </doc>
