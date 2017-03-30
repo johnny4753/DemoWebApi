@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
@@ -8,6 +9,7 @@ using System.Web.Http.Description;
 using DemoWebApi.Extension;
 using DemoWebApi.Interface;
 using DemoWebApi.Models;
+using DemoWebApi.Models.DataTransferObject;
 using DemoWebApi.Models.Domain;
 using DemoWebApi.Repository;
 using PagedList;
@@ -55,22 +57,30 @@ namespace DemoWebApi.Controllers
 
         [HttpPost]
         [Route("api/customers/{customerId}/orders/{year:int}/{month:int}/page/{pageNumber:int=1}")]
+        [ResponseType(typeof(IPagedList<OrderDto>))]
         public IHttpActionResult GetCustomerOrdersBy(string customerId, int year, int month, int pageNumber, OrderSearchFilter searchFilter)
         {
+            if (searchFilter == null)
+            {
+                searchFilter = new OrderSearchFilter();
+            }
             var startTime = new DateTime(year, month, 1);
-            var endTime = new DateTime(year, month + 1, 1);
+            var days = DateTime.DaysInMonth(year, month);
+            var endTime = new DateTime(year, month, days, 23, 59, 59);
             //取得顧客該月訂單
             var monthOrders = _customerRepository
                 .GetAll()
                 .Include(x => x.Orders)
                 .FirstOrDefault(x => x.CustomerID == customerId)?
-                .Orders.AsQueryable()
+                .Orders
                 .Where(x => x.OrderDate >= startTime
-                            && x.OrderDate < endTime );
+                            && x.OrderDate <= endTime );
             //搜尋過濾
             var filteredOrders = monthOrders?.Where(searchFilter.GetPredicate());
+            var result = Tools.AutoMapperConfig.Mapper
+                        .Map<List<OrderDto>>(filteredOrders);// 投影到 Dto 物件隱藏導覽屬性
 
-            return Ok(filteredOrders
+            return Ok(result.AsQueryable()
                         .OrderBy(searchFilter.SortColumnName)
                         .ToPagedList(pageNumber, pageSize: 5));
         }
