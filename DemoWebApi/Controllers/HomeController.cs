@@ -24,7 +24,7 @@ namespace DemoWebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload(HomeUploadViewModel viewModel)
+        public ActionResult Upload(HomeUploadViewModel viewModel) //[FluentValidation]
         {
             if (!ModelState.IsValid)
             {

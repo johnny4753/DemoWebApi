@@ -90,13 +90,13 @@ namespace DemoWebApi.Controllers
                 .Where(x => x.OrderDate >= startTime
                             && x.OrderDate <= endTime );
             //搜尋過濾
-            var filteredOrders = monthOrders?.Where(searchFilter.GetPredicate());
-            var result = Tools.AutoMapperConfig.Mapper
+            var filteredOrders = monthOrders?.Where(searchFilter.GetPredicate());   //[LinqKit]
+            var result = Tools.AutoMapperConfig.Mapper       //[AutoMapper]
                         .Map<List<OrderDto>>(filteredOrders);// 投影到 Dto 物件隱藏導覽屬性
 
             return Ok(result.AsQueryable()
-                        .OrderBy(searchFilter.SortColumnName)
-                        .ToPagedList(pageNumber, pageSize: 5));
+                        .OrderBy(searchFilter.SortColumnName) //[DynamicQuery]
+                        .ToPagedList(pageNumber, pageSize: 5)); //[PagedList]
         }
 
         
@@ -108,7 +108,7 @@ namespace DemoWebApi.Controllers
         public IHttpActionResult GetCustomersCsv()
         {
             var customers = _customerRepository.GetAll();
-            return this.Csv
+            return this.Csv  //擴充 ApiController, 回傳自定義的 CsvContentResult
                 (
                     entities: customers, 
                     fileName: "Customers.csv"

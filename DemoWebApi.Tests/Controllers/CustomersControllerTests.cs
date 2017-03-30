@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DemoWebApi.Controllers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using DemoWebApi.Interface;
@@ -22,11 +18,11 @@ namespace DemoWebApi.Controllers.Tests
         public void GetReturnsCustomerWithSameId()
         {
             // Arrange
-            var customer = Builder<Customer>.CreateNew()
+            var customer = Builder<Customer>.CreateNew()  //[NBuilder]
                             .With(x => x.CustomerID = "testId")
                             .Build();
             var customers = new List<Customer>{customer};
-            var mockRepository = new Mock<IRepository<Customer>>();
+            var mockRepository = new Mock<IRepository<Customer>>(); //[Moq]
             mockRepository.Setup(x => x.GetAll())
                 .Returns(customers.AsQueryable());
 
