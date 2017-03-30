@@ -508,5 +508,10 @@
             船城市
             </summary>
         </member>
+        <member name="P:DemoWebApi.Models.OrderSearchFilter.SortColumnName">
+            <summary>
+            指定依照 Order 的哪個欄位名稱做排序，預設為 CustomerID
+            </summary>
+        </member>
     </members>
 </doc>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -9,6 +10,7 @@ using DemoWebApi.Interface;
 using DemoWebApi.Models;
 using DemoWebApi.Models.Domain;
 using DemoWebApi.Repository;
+using PagedList;
 
 namespace DemoWebApi.Controllers
 {
@@ -62,13 +64,15 @@ namespace DemoWebApi.Controllers
                 .GetAll()
                 .Include(x => x.Orders)
                 .FirstOrDefault(x => x.CustomerID == customerId)?
-                .Orders
+                .Orders.AsQueryable()
                 .Where(x => x.OrderDate >= startTime
                             && x.OrderDate < endTime );
             //搜尋過濾
             var filteredOrders = monthOrders?.Where(searchFilter.GetPredicate());
 
-            return Ok(filteredOrders);
+            return Ok(filteredOrders
+                        .OrderBy(searchFilter.SortColumnName)
+                        .ToPagedList(pageNumber, pageSize: 5));
         }
 
         

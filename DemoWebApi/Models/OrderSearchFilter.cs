@@ -30,6 +30,11 @@ namespace DemoWebApi.Models
         [StringLength(15)]
         public string SearchShipCity { get; set; }
 
+        /// <summary>
+        /// 指定依照 Order 的哪個欄位名稱做排序，預設為 OrderID
+        /// </summary>
+        public string SortColumnName { get; set; } = nameof(Order.OrderID);
+
         public ExpressionStarter<Order> GetPredicate()
         {
             var predicate = PredicateBuilder.New<Order>(true);
