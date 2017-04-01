@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
-using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DemoWebApi.Attributes;
 using DemoWebApi.Extension;
 using DemoWebApi.Interface;
 using DemoWebApi.Models;
@@ -122,12 +122,9 @@ namespace DemoWebApi.Controllers
         /// <returns></returns>
         [Route("api/customers")]
         [HttpPost]
+        [ValidateModel]
         public IHttpActionResult CreateCustomer([FromBody]Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(GetModelValidationErrorMsg());
-            }
             var createdCustomer = _customerRepository.Create(customer);
             return Ok($"Customer:{createdCustomer.CustomerID} 已被新增");
         }
@@ -139,12 +136,9 @@ namespace DemoWebApi.Controllers
         /// <returns></returns>
         [Route("api/customers")]
         [HttpPut]
+        [ValidateModel]
         public IHttpActionResult UpdateCustomer([FromBody]Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(GetModelValidationErrorMsg());
-            }
             var updatedCustomer = _customerRepository.Update(customer);
             return Ok($"Customer:{updatedCustomer.CustomerID} 已被更新");
         }
@@ -160,19 +154,6 @@ namespace DemoWebApi.Controllers
         {
             _customerRepository.Delete(new Customer {CustomerID = customerId});
             return Ok($"Customer:{customerId} 已被移除");
-        }
-
-        private string GetModelValidationErrorMsg()
-        {
-            var sb = new StringBuilder();
-            foreach (var modelState in ModelState.Values)
-            {
-                foreach (var error in modelState.Errors)
-                {
-                    sb.Append(error.ErrorMessage);
-                }
-            }
-            return sb.ToString();
         }
     }
 }

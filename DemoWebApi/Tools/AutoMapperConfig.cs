@@ -19,11 +19,12 @@ namespace DemoWebApi.Tools
 
     public class MyProfile : Profile
     {
-        protected override void Configure()
+        public MyProfile()
         {
             // 在此處 CreateMap<src, dest>() , 集中管理類別對應轉換
             CreateMap<Order, OrderDto>();
         }
+        
     }
 
 }
