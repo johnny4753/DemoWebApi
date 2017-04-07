@@ -33,19 +33,20 @@ namespace DemoWebApi.Extension
         {
             using (var ms = new MemoryStream())
             {
-                using (TextWriter txt = new StreamWriter(ms))
+                using (var sw = new StreamWriter(ms, Encoding.UTF8))
                 {
-                    var cc = new CsvContext(); //[LINQtoCSV]
-                    cc.Write(_content, txt);
-                    txt.Flush();
+                    var csvContext = new CsvContext(); //[LINQtoCSV]
+                    csvContext.Write(_content, sw);
+                    sw.Flush();
                     ms.Position = 0;
-                    var fileData = Encoding.ASCII.GetString(ms.ToArray());
                     var resp = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = new StringContent(fileData)
+                        Content = new ByteArrayContent(ms.ToArray())
                     };
-                    resp.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-excel");
-                    resp.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    resp.Content.Headers.ContentType 
+                        = new MediaTypeHeaderValue("application/x-excel");
+                    resp.Content.Headers.ContentDisposition 
+                        = new ContentDispositionHeaderValue("attachment")
                     {
                         FileName = _fileName
                     };

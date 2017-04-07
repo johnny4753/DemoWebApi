@@ -1,3 +1,5 @@
+using LINQtoCSV;
+
 namespace DemoWebApi.Models.Domain
 {
     using System;
@@ -15,10 +17,12 @@ namespace DemoWebApi.Models.Domain
         }
 
         [StringLength(5)]
+        [CsvColumn(Name = "顧客ID")]
         public string CustomerID { get; set; }
 
         [Required]
         [StringLength(40)]
+        [CsvColumn(Name = "顧客名稱")]
         public string CompanyName { get; set; }
 
         [StringLength(30)]
