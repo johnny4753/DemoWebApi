@@ -22,7 +22,7 @@ namespace DemoWebApi.Models.Domain
 
         [Required]
         [StringLength(40)]
-        [CsvColumn(Name = "顧客名稱")]
+        [CsvColumn(Name = "公司名稱")]
         public string CompanyName { get; set; }
 
         [StringLength(30)]
